@@ -1,19 +1,38 @@
 module Mastermind
 	class Game
 
-		attr_reader :players, :board, :code, :colors
-		def initialize(players, board = Board.new, code = [], colors = [])
-			@players = players
+		attr_reader :players, :codemaker, :guesser, :board, :colors, :code
+		def initialize(players, board = Board.new, colors = [])
+			@codemaker = players[0]
+			@guesser = players[1]
 			@board = board
 			@colors = colors.empty? ? default_colors : colors
-			@code = code.empty? ? create_code(@colors) : code
+		end
+
+		def get_code(player)
+			if player.type == :human
+				puts "#{player.name} please enter your secret code seperated
+by commas using the following colors: "
+				colors.each { |color| print "#{color} "}
+				code = gets.chomp.upcase
+				code = code.split(",")
+			else
+				code = player.generate_code(colors)
+			end
+			code
 		end
 
 		def get_guess(player)
-			puts "#{player.name} please enter your guess seperated
-by commas (in the following format): R,R,G,B"
-			guess = gets.chomp.upcase
-			guess = guess.split(",")
+			if player.type == :human
+				puts "#{player.name} please enter your guess seperated
+by commas using the following colors: "
+				colors.each { |color| print "#{color} "}
+				guess = gets.chomp.upcase
+				guess = guess.split(",")
+			else
+				guess = player.generate_guess(colors)
+			end
+			guess
 		end
 
 		def intro_message
@@ -39,18 +58,19 @@ Instructions:
 		def play
 			turn = 0
 			intro_message
+			@code = get_code(codemaker)
 			while true
 				board.display_board
-				guess = get_guess(players[0])
+				guess = get_guess(guesser)
 				board.set_guess_row(turn, guess)
 				hint = board.generate_hint(guess, code)
 				board.set_hint_row(turn, hint)
 				if board.board_full?
-					puts "The Codemaker won..."
+					puts "The Codemaker, #{codemaker.name}, won!"
 					puts "The correct code was #{code}"
 					return
 				elsif board.correct_guess?(guess, code)
-					puts "#{players[0].name} won the game with the correct guess of #{code}"
+					puts "#{guesser.name} won the game with the correct guess of #{code}"
 					return
 				end
 				turn += 1
@@ -58,12 +78,6 @@ Instructions:
 		end
 
 		private
-
-		def create_code(colors)
-			code = []
-			4.times { code << colors.sample }
-			code
-		end
 
 		def default_colors
 			['R', 'B', 'G', 'Y', 'O', 'P']

@@ -49,24 +49,18 @@ module Mastermind
 			end
 		end
 
-		def default_grid
-			Array.new(10) { Array.new(4) { " " } }
-		end
-
-		def get_guess_row(row)
-			guess_grid[row]
-		end
-
 		def set_guess_row(row, value)
 			guess_grid[row] = value
 		end
 
-		def get_hint_row(row)
-			hint_grid[row]
-		end
-
 		def set_hint_row(row, value)
 			hint_grid[row] = value
+		end
+
+		private
+
+		def default_grid
+			Array.new(10) { Array.new(4) { " " } }
 		end
 
 	end
