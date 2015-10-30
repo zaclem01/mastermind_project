@@ -26,7 +26,7 @@ module Mastermind
 
 		def board_full?
 			guess_grid.all? do |element|
-				element.none? { |peg| peg.empty? }
+				element.none? { |peg| peg == " " }
 			end
 		end
 
@@ -50,7 +50,7 @@ module Mastermind
 		end
 
 		def default_grid
-			Array.new(10) { Array.new(4) { "" } }
+			Array.new(10) { Array.new(4) { " " } }
 		end
 
 		def get_guess_row(row)
