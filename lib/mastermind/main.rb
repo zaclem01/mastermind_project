@@ -1,9 +1,10 @@
 require_relative "../mastermind.rb"
 
-players = []
 play_again = true
 
 while play_again
+	players = []
+
 	puts "Welcome to Mastermind!"
 	puts "What's your name?"
 	name = gets.chomp.upcase

@@ -53,6 +53,10 @@ module Mastermind
 			guess_grid[row] = value
 		end
 
+		def get_hint_row(row)
+			hint_grid[row]
+		end
+
 		def set_hint_row(row, value)
 			hint_grid[row] = value
 		end

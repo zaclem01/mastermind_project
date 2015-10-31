@@ -22,7 +22,7 @@ by commas using the following colors: "
 			code
 		end
 
-		def get_guess(player)
+		def get_guess(player, hint)
 			if player.type == :human
 				puts "#{player.name} please enter your guess seperated
 by commas using the following colors: "
@@ -30,7 +30,7 @@ by commas using the following colors: "
 				guess = gets.chomp.upcase
 				guess = guess.split(",")
 			else
-				guess = player.generate_guess(colors)
+				guess = player.generate_guess(colors, hint)
 			end
 			guess
 		end
@@ -61,7 +61,8 @@ Instructions:
 			@code = get_code(codemaker)
 			while true
 				board.display_board
-				guess = get_guess(guesser)
+				previous_hint = board.get_hint_row(turn-1)
+				guess = get_guess(guesser, previous_hint)
 				board.set_guess_row(turn, guess)
 				hint = board.generate_hint(guess, code)
 				board.set_hint_row(turn, hint)
